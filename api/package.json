@@ -10,7 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.2",
+    "cors": "^2.8.5",
     "express": "^4.17.3",
+    "express-jwt": "^7.7.5",
+    "helmet": "^5.1.0",
+    "jwks-rsa": "^2.1.4",
     "mongodb": "^4.4.0",
     "mongodb-memory-server": "^8.4.0",
     "pg-mem": "^2.3.3"

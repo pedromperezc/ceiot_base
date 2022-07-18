@@ -3,6 +3,15 @@ const bodyParser = require("body-parser");
 const {MongoMemoryServer} = require("mongodb-memory-server");
 const {MongoClient} = require("mongodb");
 const PgMem = require("pg-mem");
+const cors = require('cors');
+const helmet = require('helmet');
+
+
+const { expressjwt: jwt } = require('express-jwt');
+
+//const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
+
 
 const db = PgMem.newDb();
 
@@ -38,25 +47,37 @@ async function getMeasurements() {
 
 const app = express();
 
-app.use(bodyParser.urlencoded({extended:false}));
+//app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
 
 app.use(express.static('spa'));
 app.use('/js', express.static('spa'));
 
+// enabling CORS for all requests
+app.use(cors());
+
+// adding Helmet to enhance your API's security
+app.use(helmet());
+
+
 const PORT = 8080;
 
-app.post('/measurement', function (req, res) {
--       console.log("device id    : " + req.body.id + " key         : " + req.body.key + " temperature : " + req.body.t + " humidity    : " + req.body.h);	
-    const {insertedId} = insertMeasurement({id:req.body.id, t:req.body.t, h:req.body.h});
-	res.send("received measurement into " +  insertedId);
-});
 
-app.post('/device', function (req, res) {
-	console.log("device id    : " + req.body.id + " name        : " + req.body.n + " key         : " + req.body.k );
+const checkJwt = jwt({
+	  secret: jwksRsa.expressJwtSecret({
+		      cache: true,
+		      rateLimit: true,
+		      jwksRequestsPerMinute: 5,
+		      jwksUri: `https://pedromperezc.us.auth0.com/.well-known/jwks.json`
+		    }),
 
-    db.public.none("INSERT INTO devices VALUES ('"+req.body.id+ "', '"+req.body.n+"', '"+req.body.k+"')");
-	res.send("received new device");
-});
+	  // Validate the audience and the issuer.
+	  audience: 'https://ads-api',
+          issuer: `https://pedromperezc.us.auth0.com/`,
+          algorithms: ['RS256']
+	            });
+
+
 
 
 app.get('/web/device', function (req, res) {
@@ -178,6 +199,24 @@ app.get('/admin/:command', function(req,res) {
                 "</html>";
     res.send(render(template,{msg:msg}));
 });	
+
+app.use(checkJwt);
+
+
+app.post('/measurement', function (req, res) {
+	-       console.log("device id    : " + req.body.id + " key         : " + req.body.key + " temperature : " + req.body.t + " humidity    : " + req.body.h);
+	        console.log(req.body);
+	    const {insertedId} = insertMeasurement({id:req.body.id, t:req.body.t, h:req.body.h});
+	        res.send("received measurement into " +  insertedId);
+});
+
+app.post('/device', function (req, res) {
+	        console.log("device id    : " + req.body.id + " name        : " + req.body.n + " key         : " + req.body.k );
+
+	    db.public.none("INSERT INTO devices VALUES ('"+req.body.id+ "', '"+req.body.n+"', '"+req.body.k+"')");
+	        res.send("received new device");
+});
+
 
 
 startDatabase().then(async() => {
