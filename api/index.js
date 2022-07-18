@@ -16,6 +16,8 @@ async function startDatabase() {
     const uri = mongod.getUri();	
     const connection = await MongoClient.connect(uri, {useNewUrlParser: true});
     database = connection.db();
+    console.log("Database started");
+
 }
 
 async function getDatabase() {
@@ -25,6 +27,8 @@ async function getDatabase() {
 
 async function insertMeasurement(message) {
     const {insertedId} = await database.collection(collectionName).insertOne(message);
+    console.log("ROW INSERTED insertdID: "+ insertedId );
+
     return insertedId;
 }
 
