@@ -1,3 +1,6 @@
-wget -O output.txt "http://localhost:8080/term/device/$1"
+curl -o output.txt --request GET \
+	  --url http://localhost:8080/term/device/$1 \
+	    --header 'authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InhXTkFIeG9WTldRVjFRZ0ZlTUZPSiJ9.eyJpc3MiOiJodHRwczovL3BlZHJvbXBlcmV6Yy51cy5hdXRoMC5jb20vIiwic3ViIjoib2k0WHhsTnhDTU81R0NHT2dWbkRHc2lTUW52dzZtZjlAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vYWRzLWFwaSIsImlhdCI6MTY1ODEwNzY1MCwiZXhwIjoxNjU4MTk0MDUwLCJhenAiOiJvaTRYeGxOeENNTzVHQ0dPZ1ZuREdzaVNRbnZ3Nm1mOSIsImd0eSI6ImNsaWVudC1jcmVkZW50aWFscyJ9.LZMHP3Fu958ZbzRWV9ERLgctDiwhx8L7iv0aXj6j8YYlaciNCEF6RdiQjoNPXrEEBM_O0ztSTj-XHWt3o9G7sYYHbDjvWs-NTw2KAOh5CbE_Cu0B52aQZLiJuNqt7sfOFwHiMyQeQ04pji6GwnA8A4bOtkE7n4RKV0CRODPB-XJufQ2x0ecM45zrrakPvPAyRin_MKRvPLN45PHvstjLGMOliwZRo-JJp4_0v-2OCecpIh4TxlPcTP3nOuyi2mEheq4ItbzQGeU2nnsgOvGX7-o1Il_daeK22oA8E5R3GJfU-5gjfIl_wcmnSSUeBjku84C1ES72P6yMLPcgClKftQ'
+  
 echo "RENDER"
 cat output.txt

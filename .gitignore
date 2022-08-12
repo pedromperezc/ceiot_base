@@ -3,3 +3,6 @@
 *.swp
 sdkconfig
 */config.h
+auth.py
+__pycache__/
+

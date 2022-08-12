@@ -68,12 +68,12 @@ const checkJwt = jwt({
 		      cache: true,
 		      rateLimit: true,
 		      jwksRequestsPerMinute: 5,
-		      jwksUri: `https://pedromperezc.us.auth0.com/.well-known/jwks.json`
+		      jwksUri: `https://pedropereziot.us.auth0.com/.well-known/jwks.json`
 		    }),
 
 	  // Validate the audience and the issuer.
-	  audience: 'https://ads-api',
-          issuer: `https://pedromperezc.us.auth0.com/`,
+	  audience: 'https://pedropereziot.us.auth0.com/api/v2/',
+          issuer: `https://pedropereziot.us.auth0.com/`,
           algorithms: ['RS256']
 	            });
 
